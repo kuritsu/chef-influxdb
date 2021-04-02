@@ -19,7 +19,7 @@ include InfluxdbCookbook::Helpers
 action :install do
   case new_resource.install_type
   when 'package'
-    if platform_family? 'rhel'
+    if platform_family?('rhel', 'amazon')
       yum_repository 'influxdb' do
         description 'InfluxDB Repository - RHEL \$releasever'
         baseurl node['influxdb']['upstream_repository']
@@ -54,7 +54,7 @@ action :install do
       options '--force-yes -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold"' if platform_family? 'debian'
     end
   when 'file'
-    if platform_family? 'rhel'
+    if platform_family?('rhel', 'amazon')
       file_name = "#{new_resource.package_name}-#{new_resource.install_version}.x86_64.rpm"
       remote_file "#{Chef::Config[:file_cache_path]}/#{file_name}" do
         source "#{node['influxdb']['download_urls']['rhel']}/#{file_name}"
@@ -90,7 +90,7 @@ end
 # rubocop:enable Metrics/BlockLength
 
 action :remove do
-  if platform_family? 'rhel'
+  if platform_family?('rhel', 'amazon')
     yum_repository 'influxdb' do
       action :delete
       only_if { new_resource.include_repository }
