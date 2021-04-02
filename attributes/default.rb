@@ -131,13 +131,13 @@ default['influxdb']['config'] = {
 }
 
 case node['platform_family']
-when 'rhel', 'fedora'
+when 'rhel', 'fedora', 'amazon'
   default['influxdb']['upstream_repository'] = case node['platform']
                                                when 'centos'
                                                  "https://repos.influxdata.com/centos/#{node['platform_version'].to_i}/$basearch/stable"
                                                when 'amazon'
                                                  # ref: https://aws.amazon.com/amazon-linux-ami/faqs/
-                                                 'https://repos.influxdata.com/centos/6/$basearch/stable'
+                                                 'https://repos.influxdata.com/centos/7/$basearch/stable'
                                                else
                                                  "https://repos.influxdata.com/rhel/#{node['platform_version'].to_i}/$basearch/stable"
                                                end
